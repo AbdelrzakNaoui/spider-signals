@@ -1,0 +1,290 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Abdelrzak Dz Trader</title>
+  <link rel="icon" href="https://static.vecteezy.com/system/resources/thumbnails/021/016/948/small_2x/trading-icon-trading-graphic-symbol-trade-logo-design-trade-mark-logo-vector.jpg" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {margin: 0; padding: 0; box-sizing: border-box;}
+    body {
+      font-family: 'Poppins', sans-serif;
+      height: 100vh;
+      background: radial-gradient(circle at top left, #1e1e2f, #0c0c1c);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: #f4f4f4;
+      padding: 20px;
+    }
+    .logo {
+      width: 60px;
+      margin-bottom: 10px;
+    }
+    .container {
+      width: 100%;
+      max-width: 500px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+    }
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 25px;
+      color: #ffb347;
+      text-shadow: 0 0 10px #ffb34799;
+    }
+    input {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 20px;
+      font-size: 1rem;
+      border-radius: 12px;
+      border: 1px solid #666;
+      background-color: #1c1c2e;
+      color: #fff;
+      transition: 0.3s;
+    }
+    input:focus {
+      outline: none;
+      border-color: #ff6b81;
+      box-shadow: 0 0 10px #ff6b81aa;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(to right, #ff6b81, #f093fb);
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      transform: scale(1.03);
+      background: linear-gradient(to right, #f093fb, #ff6b81);
+    }
+    .signal-box {
+      margin-top: 20px;
+      max-height: 300px;
+      overflow-y: auto;
+      padding: 10px;
+      text-align: left;
+    }
+    .signal {
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .call { background-color: #28a745; color: white; }
+    .put { background-color: #dc3545; color: white; }
+    .copy-btn {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .copy-btn:hover { background-color: #0056b3; }
+    .timer {
+      font-size: 0.9rem;
+      color: #ffeaa7;
+      margin-top: 5px;
+      width: 100%;
+    }
+    #loader {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #ffb347;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 2s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .telegram-link {
+      margin-top: 15px;
+      text-align: center;
+    }
+    .telegram-link a {
+      color: #00bcd4;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    @media (max-width: 500px) {
+      .container { padding: 20px; }
+      h1 { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <img src="https://static.vecteezy.com/system/resources/thumbnails/021/016/948/small_2x/trading-icon-trading-graphic-symbol-trade-logo-design-trade-mark-logo-vector.jpg" alt="Logo" class="logo"/>
+
+  <div id="login-container" class="container">
+    <h1>Login</h1>
+    <input type="text" id="username" placeholder="Username" />
+    <input type="password" id="password" placeholder="Password" />
+    <button onclick="login()">Login</button>
+  </div>
+
+  <div id="signal-container" class="container" style="display: none">
+    <h1>Signal Generator By Abdelrzak</h1>
+    <input type="number" id="signalCount" placeholder="Enter the number of future signals (max 20)" max="20" />
+    <button onclick="generateSignals()">Generate Signals</button>
+    <div id="loaderContainer" style="display:none;">
+      <div id="loader"></div>
+      <p>Generating Signals...</p>
+    </div>
+    <div id="signalBox" class="signal-box"></div>
+    <div class="telegram-link">
+      Join our Telegram 👉 
+	  Time Bot UTC+01:00 <a href="https://t.me/abdelrzak56" target="_blank">@abdelrzak56</a>
+    </div>
+  </div>
+
+<script>
+  const encodedUsername = "NTYwMA=="; // "5600"
+  const encodedPassword = "NTYwMA=="; // "5600"
+
+  function login() {
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    if (btoa(username) === encodedUsername && btoa(password) === encodedPassword) {
+      document.getElementById("login-container").style.display = "none";
+      document.getElementById("signal-container").style.display = "block";
+    } else {
+      alert("password protected by abdelrzak using Base64.");
+    }
+  }
+      // Signal generation logic
+      const marketPairs = [
+        "GBP/AUD-OTC",
+        "GBP/CAD-OTC",
+        "NZD/CAD-OTC",
+        "NZD/CHF-OTC",
+        "NZD/JPY-OTC",
+        "USD/BDT-OTC",
+        "USD/BRL-OTC",
+        "USD/CHF-OTC",
+        "USD/COP-OTC",
+        "USD/DZD-OTC",
+        "USD/INR-OTC",
+        "USD/NGN-OTC",
+        "USD/PKR-OTC",
+        "USD/TRY-OTC",
+        "USD/ZAR-OTC",
+        "Bitcoin-OTC",
+        "Gold-OTC",
+        "Silver-OTC",
+        "USCrude-OTC",
+        "UKBrent-OTC",
+      ];
+
+      function generateSignal(market, signalTime) {
+        const direction = Math.random() < 0.5 ? "PUT" : "CALL";
+        return { market, time: signalTime, direction };
+      }
+
+      function generateFutureSignals(signalCount) {
+        const futureSignals = [];
+        let currentTime = new Date();
+
+        for (let i = 0; i < signalCount; i++) {
+          const market =
+            marketPairs[Math.floor(Math.random() * marketPairs.length)];
+          const futureTime = new Date(
+            currentTime.getTime() +
+              Math.floor(Math.random() * 8 + 2) * 60 * 1000
+          );
+          const formattedTime = futureTime.toLocaleTimeString("en-GB", {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+          const signal = generateSignal(market, formattedTime);
+          futureSignals.push(signal);
+          currentTime = futureTime;
+        }
+
+        return futureSignals;
+      }
+
+      function generateSignals() {
+        const signalCount = parseInt(
+          document.getElementById("signalCount").value
+        );
+        if (isNaN(signalCount) || signalCount <= 0 || signalCount > 20) {
+          alert("Please enter a valid number of signals (1 to 20).");
+          return;
+        }
+
+        const loaderContainer = document.getElementById("loaderContainer");
+        loaderContainer.style.display = "block";
+
+        setTimeout(() => {
+          loaderContainer.style.display = "none";
+          const signalBox = document.getElementById("signalBox");
+          signalBox.innerHTML = "";
+
+          const signals = generateFutureSignals(signalCount);
+
+          signals.forEach((signal) => {
+            const signalDiv = document.createElement("div");
+            signalDiv.classList.add("signal", signal.direction.toLowerCase());
+            signalDiv.innerHTML = `
+            <span>${signal.market} at ${signal.time}</span>
+            <span>${signal.direction}</span>
+            <button class="copy-btn" onclick="copySignal('${signal.market} at ${signal.time} - ${signal.direction}')">Copy</button>
+          `;
+            signalBox.appendChild(signalDiv);
+          });
+        }, 5000); // Simulate 5 seconds signal generation time
+      }
+
+      // Copy signal to clipboard
+      function copySignal(signalText) {
+        const textArea = document.createElement("textarea");
+        textArea.value = signalText;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+        alert("Signal copied to clipboard!");
+      }
+
+  function startCountdown(id, seconds) {
+    let timer = seconds;
+    const el = document.getElementById(id);
+    const interval = setInterval(() => {
+      timer--;
+      el.textContent = `⏳ ${timer}s`;
+      if (timer <= 0) {
+        el.textContent = "⏱️ Time's up";
+        clearInterval(interval);
+      }
+    }, 1000);
+  }
+</script>
+</body>
+</html>
